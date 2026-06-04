@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================
+   CẤU HÌNH CSS DÀNH RIÊNG CHO VIỆC IN PDF
+   ========================================= */
+@media print {
+  /* Ẩn triệt để nút bấm và các thẻ rác của trình duyệt */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Đưa nền về trắng, chữ về đen để đọc rõ */
+  body, html, #root {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Xóa bóng đổ và đổi viền sang xám nhạt */
+  .print-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    background-color: white !important;
+  }
+
+  /* CHỐNG CẮT NỘI DUNG GIỮA TRANG */
+  .break-inside-avoid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* TỰ ĐỘNG NHẢY TRANG MỚI CHO CÁC PHẦN CHÍNH */
+  .page-break-before {
+    page-break-before: always;
+    break-before: page;
+  }
+}
