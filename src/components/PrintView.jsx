@@ -171,7 +171,8 @@ export default function PrintView() {
               Quá trình tham gia học phần và chủ động hoàn thành hệ thống bài tập thành phần này đã giúp bản thân trang bị được một tư duy số vững vàng và hệ thống hóa năng lực làm việc hiệu quả trong môi trường học thuật đại học. Các bài học thực tế, đặc biệt là tư duy tương tác hiệu quả với AI tạo sinh (Prompt Engineering) và quy tắc bảo mật an toàn thông tin, đã làm thay đổi hoàn toàn cách tiếp cận công nghệ của bản thân, biến công cụ AI thành người trợ lý đắc lực đồng hành cùng quá trình học tập kỹ thuật lâu dài.
             </p>
             <div className="bg-slate-50 p-4 border border-slate-300 rounded-lg italic text-slate-800 text-xs leading-relaxed">
-              <strong>Cam kết liêm chính học thuật:</strong> "Tôi cam đoan toàn bộ nội dung báo cáo, minh chứng sản phẩm số học tập được trình bày một cách tường minh trong Portfolio này hoàn toàn là thành quả tự học, tự thực hành dưới sự hướng dẫn chuyên môn của học phần. Mọi công cụ Trí tuệ Nhân tạo hỗ trợ đều được khai báo rõ ràng, tuân thủ tuyệt đối quy định chống đạo văn và liêm chính học thuật của nhà trường."
+              <strong>Cam kết liêm chính học thuật:</strong> 
+              "Tôi cam đoan toàn bộ nội dung báo cáo, minh chứng sản phẩm số học tập được trình bày một cách tường minh trong Portfolio này hoàn toàn là thành quả tự học, tự thực hành dưới sự hướng dẫn chuyên môn của học phần. Mọi công cụ Trí tuệ Nhân tạo hỗ trợ đều được khai báo rõ ràng, tuân thủ tuyệt đối quy định chống đạo văn và liêm chính học thuật của nhà trường."
             </div>
             
             {/* Khối chữ ký ngày tháng năm chuẩn học thuật */}

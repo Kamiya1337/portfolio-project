@@ -71,17 +71,47 @@ export default function ProjectsTab() {
         </button>
 
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-          {/* Detail Header */}
+          {/* Detail Header - Giao diện Dark Theme chuyên nghiệp */}
           <div className="bg-slate-900 p-8 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 opacity-10 scale-150 translate-x-1/4 -translate-y-1/4">
-               <BookOpen size={200} />
+            
+            {/* Lớp z-0: Hoa văn khắc chìm (Watermark VNU - UET) */}
+            <div className="absolute top-0 right-0 w-96 h-96 opacity-10 scale-125 translate-x-1/4 -translate-y-1/4 z-0 pointer-events-none text-slate-300">
+              <svg viewBox="0 0 500 500" className="w-full h-full" fill="none" stroke="currentColor">
+                {/* Vòng tròn đồng tâm */}
+                <circle cx="250" cy="250" r="240" strokeWidth="4" strokeDasharray="12 12" opacity="0.4" />
+                <circle cx="250" cy="250" r="220" strokeWidth="1.5" opacity="0.5" />
+                <circle cx="250" cy="250" r="200" strokeWidth="8" opacity="0.7" />
+                
+                {/* Tia sáng lan tỏa */}
+                <g strokeWidth="2" opacity="0.3">
+                  <path d="M250 10 V 50 M490 250 H 450 M250 490 V 450 M10 250 H 50" />
+                  <path d="M80 80 L 110 110 M420 80 L 390 110 M420 420 L 390 390 M80 420 L 110 390" />
+                </g>
+
+                {/* Khung lục giác công nghệ lõi */}
+                <polygon points="250,90 388,170 388,330 250,410 112,330 112,170" strokeWidth="2.5" opacity="0.5" />
+                
+                {/* Gợn sóng tri thức */}
+                <path d="M130 280 Q 190 240 250 280 T 370 280" strokeWidth="3.5" opacity="0.8"/>
+                <path d="M150 310 Q 200 280 250 310 T 350 310" strokeWidth="2" opacity="0.6"/>
+                
+                {/* Cuốn sách mở & Mạng lưới node (Computer Engineering) */}
+                <path d="M250 270 V 160 M250 160 L 160 130 V 240 L 250 270 Z" strokeWidth="2.5" opacity="0.9"/>
+                <path d="M250 160 L 340 130 V 240 L 250 270 Z" strokeWidth="2.5" opacity="0.9"/>
+                <circle cx="250" cy="160" r="8" fill="currentColor" opacity="0.9"/>
+                <circle cx="160" cy="130" r="5" fill="currentColor" opacity="0.7"/>
+                <circle cx="340" cy="130" r="5" fill="currentColor" opacity="0.7"/>
+                <circle cx="250" cy="270" r="10" fill="currentColor" opacity="1"/>
+              </svg>
             </div>
+
+            {/* Lớp z-10: Nội dung hiển thị nổi lên trên */}
             <div className="relative z-10">
-              <span className="px-3 py-1 bg-blue-500/30 text-blue-200 text-xs font-bold rounded uppercase tracking-wider mb-4 inline-block">
+              <span className="px-3 py-1 bg-blue-500/30 text-blue-200 text-xs font-bold rounded uppercase tracking-wider mb-4 inline-block backdrop-blur-sm border border-blue-400/20">
                 {selectedProject.chapter}
               </span>
-              <h2 className="text-3xl font-bold mb-3 leading-tight">{selectedProject.title}</h2>
-              <p className="text-slate-300 text-lg">{selectedProject.shortDesc}</p>
+              <h2 className="text-3xl font-bold mb-3 leading-tight drop-shadow-md">{selectedProject.title}</h2>
+              <p className="text-slate-300 text-lg max-w-3xl drop-shadow">{selectedProject.shortDesc}</p>
             </div>
           </div>
 

@@ -9,6 +9,7 @@ export default function HomeTab({ setActiveTab }) {
     <div className="max-w-6xl mx-auto space-y-12 animate-fade-in pb-10">
       
       {/* Hero Section */}
+
       <div className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white p-8 md:p-12 shadow-2xl overflow-hidden border border-slate-700">
         <div className="absolute top-0 right-0 opacity-10 pointer-events-none translate-x-1/3 -translate-y-1/4">
           <GraduationCap size={400} />
