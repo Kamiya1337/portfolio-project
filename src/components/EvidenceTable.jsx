@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { portfolioData } from '../data/portfolioData';
 import { AlertCircle, CheckCircle2, XCircle, X, Maximize2 } from 'lucide-react';
 

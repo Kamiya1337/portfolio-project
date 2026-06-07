@@ -1,4 +1,3 @@
-import React from 'react';
 import { Home, BookOpen, FileCheck, CheckSquare, MessageSquare, Menu, X, BookMarked, Printer } from 'lucide-react';
 
 export default function Sidebar({ activeTab, setActiveTab, isMobileOpen, setIsMobileOpen }) {

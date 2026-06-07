@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { portfolioData } from '../data/portfolioData';
-import { ChevronRight, ArrowLeft, FileText, Image as ImageIcon, BookOpen, X, ExternalLink } from 'lucide-react';
+import { ChevronRight, ArrowLeft, FileText, Image as ImageIcon, X, ExternalLink } from 'lucide-react';
 
 export default function ProjectsTab() {
   const [selectedProject, setSelectedProject] = useState(null);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { portfolioData } from '../data/portfolioData';
 import { Printer } from 'lucide-react';
 
