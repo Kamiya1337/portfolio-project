@@ -1,152 +1,71 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { useState } from 'react';
+import { AlertCircle, CheckCircle2, ExternalLink, FileCheck2, Files, Maximize2, X, XCircle } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
-import { AlertCircle, CheckCircle2, XCircle, X, Maximize2 } from 'lucide-react';
+import { blurSlideUp, cardHover, lineReveal, motionViewport, staggerGrid, tableRowReveal } from '../motion/variants';
+
+function isComplete(value) {
+  return Boolean(value && value !== 'Sẽ cập nhật sau' && value !== 'Không yêu cầu');
+}
 
 export default function EvidenceTable() {
   const { projects } = portfolioData;
-  
-  // State quản lý việc hiển thị Pop-up (Modal)
+  const reduceMotion = useReducedMotion();
   const [previewData, setPreviewData] = useState({ isOpen: false, url: '', type: '' });
+  const completed = projects.filter((project) => isComplete(project.report) && isComplete(project.evidenceImg) && isComplete(project.driveLink)).length;
 
-  // Hàm mở pop-up
-  const openPreview = (e, url, type) => {
-    // Nếu là link Drive, giữ nguyên hành vi mở tab mới
+  const openPreview = (event, url, type) => {
     if (type === 'drive') return;
-    
-    // Nếu là PDF hoặc Ảnh, chặn mở tab mới và bật Pop-up
-    e.preventDefault();
+    event.preventDefault();
     setPreviewData({ isOpen: true, url, type });
   };
 
-  const closePreview = () => setPreviewData({ isOpen: false, url: '', type: '' });
-
-  // Thành phần render liên kết động thông minh
-  const EvidenceLink = ({ value, label, type }) => {
-    if (value === "Sẽ cập nhật sau" || !value) {
-      return <span className="px-2 py-1 text-xs font-bold bg-yellow-100 text-yellow-700 rounded">Đang chờ</span>;
-    }
-    if (value === "Không yêu cầu") {
-      return <span className="px-2 py-1 text-xs font-bold bg-gray-100 text-gray-500 rounded">---</span>;
-    }
-    return (
-      <a 
-        href={value} 
-        target="_blank" 
-        rel="noreferrer" 
-        onClick={(e) => openPreview(e, value, type)}
-        className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-800 font-medium underline text-sm transition-colors group"
-      >
-        {label}
-        {type !== 'drive' && <Maximize2 size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />}
-      </a>
-    );
+  const EvidenceLink = ({ value, label, type, compact = false }) => {
+    if (!value || value === 'Sẽ cập nhật sau') return <span className="badge-warning">Đang chờ</span>;
+    if (value === 'Không yêu cầu') return <span className="badge-neutral">Không yêu cầu</span>;
+    const Icon = type === 'drive' ? ExternalLink : Maximize2;
+    return <motion.a href={value} target="_blank" rel="noreferrer" onClick={(event) => openPreview(event, value, type)} whileHover={reduceMotion ? undefined : { scale: 1.025, y: -1 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }} className={`inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg border border-cyan-100/[0.12] bg-cyan-100/[0.045] font-semibold text-cyan-50/85 transition-colors hover:border-cyan-200/30 hover:bg-cyan-200/[0.075] ${compact ? 'w-full px-3 py-2 text-xs' : 'px-3 py-2 text-sm'}`}>{label}<Icon size={14} /></motion.a>;
   };
 
-  const StatusBadge = ({ report, img, drive }) => {
-    const isReportDone = report !== "Sẽ cập nhật sau" && report !== "" && report !== "Không yêu cầu";
-    const isImgDone = img !== "Sẽ cập nhật sau" && img !== "" && img !== "Không yêu cầu";
-    const isDriveDone = drive !== "Sẽ cập nhật sau" && drive !== "" && drive !== "Không yêu cầu";
-    
-    if (isReportDone && isImgDone && isDriveDone) {
-      return (
-        <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-50 text-green-600 text-xs font-bold rounded border border-green-200">
-          <CheckCircle2 size={14}/> Đã nộp
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-1 bg-rose-50 text-rose-600 text-xs font-bold rounded border border-rose-200">
-        <XCircle size={14}/> Thiếu MC
-      </span>
-    );
+  const StatusBadge = ({ project }) => {
+    const complete = isComplete(project.report) && isComplete(project.evidenceImg) && isComplete(project.driveLink);
+    return complete ? <span className="badge-success"><CheckCircle2 size={13} /> Đã nộp</span> : <span className="inline-flex items-center gap-1.5 rounded-full border border-danger/15 bg-danger-soft px-2.5 py-1 font-mono text-[10px] font-medium uppercase tracking-wider text-danger"><XCircle size={13} /> Thiếu MC</span>;
   };
 
   return (
-    <div className="max-w-6xl mx-auto animate-fade-in pb-10">
-      
-      {/* KHU VỰC HIỂN THỊ POP-UP (MODAL) XEM TRƯỚC FILE */}
+    <div className="page-shell inner-luxury-page evidence-luxury-page">
       {previewData.isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/80 backdrop-blur-sm p-4 md:p-10 animate-fade-in print:hidden">
-          <div className="bg-white w-full max-w-5xl h-full max-h-[90vh] rounded-2xl flex flex-col overflow-hidden shadow-2xl">
-            {/* Thanh Header của Modal */}
-            <div className="flex justify-between items-center p-4 border-b border-slate-200 bg-slate-50">
-              <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                {previewData.type === 'pdf' ? 'Trình xem PDF (Báo cáo)' : 'Trình xem Hình ảnh (Screenshot)'}
-              </h3>
-              <div className="flex items-center gap-4">
-                <a href={previewData.url} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline font-medium">
-                  Mở thẻ mới
-                </a>
-                <button onClick={closePreview} className="p-1.5 bg-slate-200 hover:bg-rose-500 hover:text-white text-slate-700 rounded-lg transition-colors">
-                  <X size={20} />
-                </button>
-              </div>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/80 p-2 backdrop-blur-sm sm:p-6 print:hidden" role="dialog" aria-modal="true" aria-label="Xem trước minh chứng">
+          <div className="flex h-[94dvh] w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-line bg-panel shadow-lift sm:h-[90vh] sm:rounded-2xl">
+            <div className="flex items-center justify-between gap-3 border-b border-line px-3 py-3 sm:px-5">
+              <div className="min-w-0"><p className="section-label">Preview</p><h3 className="truncate font-display text-sm font-semibold sm:text-base">{previewData.type === 'pdf' ? 'Báo cáo PDF' : 'Ảnh minh chứng'}</h3></div>
+              <div className="flex shrink-0 items-center gap-2"><a href={previewData.url} target="_blank" rel="noreferrer" className="hidden rounded-lg border border-line px-3 py-2 text-xs font-semibold sm:inline-flex">Mở thẻ mới</a><button type="button" aria-label="Đóng xem trước" onClick={() => setPreviewData({ isOpen: false, url: '', type: '' })} className="rounded-lg border border-line p-2 hover:bg-soft"><X size={18} /></button></div>
             </div>
-            
-            {/* Khu vực Nhúng nội dung */}
-            <div className="flex-1 bg-slate-200 flex justify-center items-center overflow-auto p-4">
-              {previewData.type === 'pdf' ? (
-                <iframe 
-                  src={previewData.url} 
-                  title="PDF Preview" 
-                  className="w-full h-full rounded shadow-sm border-none bg-white"
-                />
-              ) : (
-                <img 
-                  src={previewData.url} 
-                  alt="Minh chứng" 
-                  className="max-w-full max-h-full object-contain rounded shadow-sm bg-white"
-                />
-              )}
-            </div>
+            <div className="flex min-h-0 flex-1 items-center justify-center overflow-auto bg-soft p-2 sm:p-5">{previewData.type === 'pdf' ? <iframe src={previewData.url} title="PDF Preview" className="h-full w-full rounded-lg border-0 bg-panel" /> : <img src={previewData.url} alt="Minh chứng" className="max-h-full max-w-full rounded-lg bg-panel object-contain shadow-ambient" />}</div>
           </div>
         </div>
       )}
 
-      {/* GIAO DIỆN BẢNG CHÍNH */}
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2">Bảng Kiểm soát Minh chứng</h2>
-        <p className="text-slate-600 text-lg">Tổng hợp tình trạng các file báo cáo, hình ảnh và link sản phẩm cần nộp.</p>
-      </div>
+      <motion.header initial={reduceMotion ? false : 'hidden'} animate="visible" variants={blurSlideUp} className="inner-page-hero editorial-page-hero motion-depth-section relative overflow-hidden rounded-[30px] border border-cyan-100/[0.1] px-5 py-9 sm:px-9 sm:py-12"><div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-emerald-300/[0.08] blur-3xl" /><p className="section-label">Evidence control board</p><h1 className="page-heading mt-3 max-w-4xl">Bảng Kiểm soát Minh chứng</h1><p className="page-description">Tổng hợp tình trạng các file báo cáo, hình ảnh và liên kết sản phẩm cần nộp.</p><motion.div initial={reduceMotion ? false : 'hidden'} animate="visible" variants={lineReveal} className="mt-6 h-px origin-left bg-gradient-to-r from-cyan-200/45 via-cyan-100/10 to-transparent" /></motion.header>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="bg-blue-50 border-b border-blue-100 p-4 flex items-start gap-3">
-          <AlertCircle className="text-blue-600 mt-0.5 flex-shrink-0" size={20} />
-          <p className="text-sm text-blue-800">
-            <strong>Ghi chú:</strong> Click vào Báo cáo (PDF) hoặc Hình ảnh để xem nhanh ngay trên trình duyệt dưới dạng Pop-up.
-          </p>
-        </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[850px]">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm uppercase tracking-wider">
-                <th className="p-4 font-semibold w-1/4">Bài tập / Nhiệm vụ</th>
-                <th className="p-4 font-semibold">File Báo cáo</th>
-                <th className="p-4 font-semibold">Ảnh Screenshot</th>
-                <th className="p-4 font-semibold">Link Google Drive</th>
-                <th className="p-4 font-semibold text-center">Trạng thái chung</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {projects.map((project) => (
-                <tr key={project.id} className="hover:bg-slate-50 transition-colors">
-                  <td className="p-4">
-                    <p className="font-bold text-slate-800 text-sm leading-snug">{project.title}</p>
-                    <p className="text-xs text-slate-500 mt-1">{project.chapter}</p>
-                  </td>
-                  <td className="p-4"><EvidenceLink value={project.report} label="Xem báo cáo" type="pdf" /></td>
-                  <td className="p-4"><EvidenceLink value={project.evidenceImg} label="Xem ảnh" type="img" /></td>
-                  <td className="p-4"><EvidenceLink value={project.driveLink} label="Mở Drive" type="drive" /></td>
-                  <td className="p-4 text-center">
-                    <StatusBadge report={project.report} img={project.evidenceImg} drive={project.driveLink} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+      <motion.section initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={staggerGrid} className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {[{ label: 'Bài tập', value: projects.length, icon: Files }, { label: 'Đã đủ minh chứng', value: completed, icon: CheckCircle2 }, { label: 'Cần kiểm tra', value: projects.length - completed, icon: AlertCircle }, { label: 'Loại tài nguyên', value: 3, icon: FileCheck2 }].map((item) => { const Icon = item.icon; return <motion.article key={item.label} variants={blurSlideUp} whileHover={reduceMotion ? undefined : cardHover} className="quiet-card motion-hover-depth p-4 sm:p-5"><div className="flex items-center justify-between"><p className="section-label leading-4">{item.label}</p><Icon size={17} className="text-muted" /></div><p className="mt-3 font-display text-3xl font-semibold tracking-tight">{item.value}</p></motion.article>; })}
+      </motion.section>
+
+      <motion.section initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={blurSlideUp} className="surface-card evidence-dashboard motion-depth-section overflow-hidden">
+        <div className="flex items-start gap-3 border-b border-line bg-soft px-4 py-4 sm:px-5"><AlertCircle className="mt-0.5 shrink-0 text-muted" size={18} /><p className="text-sm leading-6 text-muted"><strong className="text-ink">Ghi chú:</strong> Chọn Báo cáo hoặc Hình ảnh để xem nhanh. Google Drive mở trong thẻ mới.</p></div>
+
+        <motion.div initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={staggerGrid} className="divide-y divide-line md:hidden">
+          {projects.map((project) => <motion.article key={project.id} variants={tableRowReveal} whileHover={reduceMotion ? undefined : { y: -2, backgroundColor: 'rgba(103,232,249,0.045)' }} className="p-4"><div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="font-display text-sm font-semibold leading-6">{project.title}</p><p className="mt-1 font-mono text-[9px] uppercase tracking-wider text-muted">{project.chapter}</p></div><StatusBadge project={project} /></div><div className="mt-4 grid grid-cols-1 gap-2 min-[430px]:grid-cols-3"><EvidenceLink value={project.report} label="Báo cáo" type="pdf" compact /><EvidenceLink value={project.evidenceImg} label="Hình ảnh" type="img" compact /><EvidenceLink value={project.driveLink} label="Drive" type="drive" compact /></div></motion.article>)}
+        </motion.div>
+
+        <div className="hidden overflow-x-auto md:block">
+          <table className="w-full min-w-[820px] border-collapse text-left">
+            <thead><tr className="border-b border-line bg-panel font-mono text-[10px] uppercase tracking-[0.1em] text-muted"><th className="w-[32%] px-5 py-4 font-medium">Bài tập / Nhiệm vụ</th><th className="px-4 py-4 font-medium">Báo cáo</th><th className="px-4 py-4 font-medium">Screenshot</th><th className="px-4 py-4 font-medium">Google Drive</th><th className="px-4 py-4 text-center font-medium">Trạng thái</th></tr></thead>
+            <motion.tbody initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={staggerGrid} className="divide-y divide-line">{projects.map((project) => <motion.tr key={project.id} variants={tableRowReveal} whileHover={reduceMotion ? undefined : { backgroundColor: 'rgba(103,232,249,0.045)' }} className="transition-colors duration-200"><td className="px-5 py-5"><p className="font-display text-sm font-semibold leading-6">{project.title}</p><p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-muted">{project.chapter}</p></td><td className="px-4 py-5"><EvidenceLink value={project.report} label="Xem báo cáo" type="pdf" /></td><td className="px-4 py-5"><EvidenceLink value={project.evidenceImg} label="Xem ảnh" type="img" /></td><td className="px-4 py-5"><EvidenceLink value={project.driveLink} label="Mở Drive" type="drive" /></td><td className="px-4 py-5 text-center"><StatusBadge project={project} /></td></motion.tr>)}</motion.tbody>
           </table>
         </div>
-      </div>
+      </motion.section>
     </div>
   );
 }

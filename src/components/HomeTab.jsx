@@ -1,98 +1,55 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
-import { GraduationCap, Award, Library, Layers } from 'lucide-react';
+import { blurSlideUp, buttonHover, buttonTap, cardHover, lineReveal, motionViewport, staggerGrid } from '../motion/variants';
+import Hero from './Hero';
 
 export default function HomeTab({ setActiveTab }) {
   const { student, overview } = portfolioData;
+  const reduceMotion = useReducedMotion();
 
   return (
-    <div className="max-w-6xl mx-auto space-y-12 animate-fade-in pb-10">
-      
-      {/* Hero Section */}
+    <div className="home-luxury-shell space-y-0 pb-0">
+      <Hero student={student} setActiveTab={setActiveTab} />
 
-      <div className="relative rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 text-white p-8 md:p-12 shadow-2xl overflow-hidden border border-slate-700">
-        <div className="absolute top-0 right-0 opacity-10 pointer-events-none translate-x-1/3 -translate-y-1/4">
-          <GraduationCap size={400} />
-        </div>
-        
-        <div className="relative z-10 max-w-3xl">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-sm font-semibold mb-6">
-            Báo cáo Cuối kỳ
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">
-            Digital Technology & <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">AI Learning Portfolio</span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-300 mb-6 font-light">
-            Nhập môn Công nghệ số và Ứng dụng Trí tuệ nhân tạo
-          </p>
-          
-          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/10 mb-8 max-w-2xl">
-            <p className="text-slate-200 leading-relaxed mb-4">"{student.bio}"</p>
-            <div className="flex flex-wrap gap-2">
-              {student.skills.map((skill, idx) => (
-                <span key={idx} className="px-3 py-1 bg-slate-800/80 text-blue-300 text-xs font-medium rounded-md border border-slate-700">
-                  {skill}
-                </span>
-              ))}
+      <section className="home-story-section relative overflow-hidden px-3 py-24 sm:px-5 sm:py-28 lg:px-10 lg:py-36">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_16%_30%,rgba(16,185,129,0.1),transparent_28%),radial-gradient(circle_at_88%_70%,rgba(34,211,238,0.08),transparent_30%)]" />
+        <div className="luxury-noise absolute inset-0 opacity-[0.025]" />
+
+        <motion.div initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={blurSlideUp} className="relative mx-auto max-w-[1280px]">
+          <div className="grid gap-10 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-cyan-300/62">01 / Capability architecture</p>
+              <motion.div variants={lineReveal} className="mt-5 h-px origin-left bg-gradient-to-r from-cyan-200/40 to-transparent" />
+            </div>
+            <div>
+              <h2 className="max-w-4xl font-display text-[clamp(2.8rem,5vw,5.8rem)] font-semibold leading-[0.94] tracking-[-0.06em] text-white">Năng lực số được xây dựng qua <span className="luxury-gradient-text">thực hành thật.</span></h2>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-white/46">Hệ thống hóa các nhóm năng lực hình thành trong quá trình học tập, nghiên cứu và ứng dụng AI thành một hồ sơ có cấu trúc, minh chứng và khả năng truy xuất.</p>
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <button 
-              onClick={() => setActiveTab('projects')}
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg shadow-lg shadow-blue-900/50 transition-all flex items-center gap-2"
-            >
-              <Layers size={18} /> Xem bài tập
-            </button>
-            <button 
-              onClick={() => setActiveTab('evidence')}
-              className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white font-medium rounded-lg backdrop-blur-sm transition-all flex items-center gap-2 border border-white/20"
-            >
-              <Library size={18} /> Minh chứng
-            </button>
-          </div>
-        </div>
-      </div>
+          <motion.div initial={reduceMotion ? false : 'hidden'} whileInView="visible" viewport={motionViewport} variants={staggerGrid} className="mt-16 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {overview.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <motion.article key={item.id} variants={blurSlideUp} whileHover={reduceMotion ? undefined : cardHover} className="competency-cinematic-card group relative min-h-72 overflow-hidden rounded-[26px] border border-cyan-100/[0.09] bg-[#04100e]/68 p-6 shadow-[0_28px_90px_rgba(0,0,0,0.28)] backdrop-blur-2xl">
+                  <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-cyan-300/[0.09] blur-3xl opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
+                  <div className="relative flex items-start justify-between">
+                    <span className="font-mono text-[9px] tracking-[0.2em] text-cyan-100/28">0{index + 1}</span>
+                    <ArrowUpRight size={18} className="text-white/25 transition duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-cyan-200" />
+                  </div>
+                  <div className="relative mt-12 flex h-12 w-12 items-center justify-center rounded-2xl border border-cyan-100/[0.1] bg-cyan-100/[0.055] text-cyan-100 shadow-[0_0_30px_rgba(34,211,238,0.07)]"><Icon size={21} strokeWidth={1.65} /></div>
+                  <div className="relative mt-8"><h3 className="font-display text-xl font-semibold tracking-[-0.025em] text-white/92">{item.title}</h3><p className="mt-3 text-sm leading-7 text-white/42">{item.desc}</p></div>
+                </motion.article>
+              );
+            })}
+          </motion.div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-        {[
-          { label: 'Bài học', value: '07', desc: 'Chủ đề lý thuyết' },
-          { label: 'Sản phẩm', value: '06', desc: 'Bài tập thực hành' },
-          { label: 'Kỹ năng số', value: '06+', desc: 'Nhóm năng lực lõi' },
-          { label: 'Mức điểm kỳ vọng', value: '10', desc: 'Xuất sắc' },
-        ].map((stat, i) => (
-          <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center">
-            <h3 className="text-4xl font-black text-blue-900 mb-1">{stat.value}</h3>
-            <p className="font-bold text-slate-800 text-sm">{stat.label}</p>
-            <p className="text-xs text-slate-500 mt-1">{stat.desc}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Course Overview Section */}
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <Award className="text-blue-600" size={28} />
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Tổng quan Năng lực Học phần</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {overview.map((item) => {
-            const Icon = item.icon;
-            return (
-              <div key={item.id} className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow group flex items-start gap-4">
-                <div className="p-3 bg-blue-50 text-blue-600 rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <Icon size={24} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 mb-1 leading-tight">{item.title}</h3>
-                  <p className="text-sm text-slate-500 leading-snug">{item.desc}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
+          <motion.button type="button" onClick={() => setActiveTab('projects')} initial={reduceMotion ? false : { opacity: 0, y: 28, filter: 'blur(10px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={motionViewport} transition={{ duration: reduceMotion ? 0 : 0.72, ease: [0.25, 0.46, 0.45, 0.94] }} whileHover={reduceMotion ? undefined : buttonHover} whileTap={reduceMotion ? undefined : buttonTap} className="mt-12 inline-flex items-center gap-3 rounded-full border border-cyan-100/[0.12] bg-cyan-100/[0.04] px-5 py-3 text-sm font-semibold text-cyan-50/78 backdrop-blur-xl">
+            Khám phá toàn bộ bài tập <ArrowRight size={16} />
+          </motion.button>
+        </motion.div>
+      </section>
     </div>
   );
 }

@@ -1,18 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import HomeTab from './components/HomeTab';
 import ProjectsTab from './components/ProjectsTab';
 import EvidenceTable from './components/EvidenceTable';
 import RubricTable from './components/RubricTable';
 import Summary from './components/Summary';
-import PrintView from './components/PrintView'; // Import Component Mới
+import PrintView from './components/PrintView';
+import { pageTransition } from './motion/variants';
+
+const tabTitles = {
+  home: 'Tổng quan Portfolio',
+  projects: 'Bài tập & Dự án',
+  evidence: 'Kiểm soát Minh chứng',
+  rubric: 'Rubric & Đánh giá',
+  summary: 'Tổng kết Cá nhân',
+  print: 'Bản in Portfolio',
+};
 
 export default function App() {
-  // Chỉ khai báo state 1 lần duy nhất
   const [activeTab, setActiveTab] = useState('home');
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
-  // Hàm xử lý chuyển trang bằng component
   const renderContent = () => {
     switch (activeTab) {
       case 'home': return <HomeTab setActiveTab={setActiveTab} />;
@@ -20,25 +33,88 @@ export default function App() {
       case 'evidence': return <EvidenceTable />;
       case 'rubric': return <RubricTable />;
       case 'summary': return <Summary />;
-      case 'print': return <PrintView />; // Định tuyến sang trang in
+      case 'print': return <PrintView />;
       default: return <HomeTab setActiveTab={setActiveTab} />;
     }
   };
 
+  const isPrintView = activeTab === 'print';
+
+  useEffect(() => {
+    if (isPrintView || reduceMotion) return;
+
+    const lenis = new Lenis({
+      lerp: 0.075,
+      wheelMultiplier: 0.85,
+      smoothWheel: true,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    const update = (time) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(update);
+      lenis.destroy();
+    };
+  }, [isPrintView, reduceMotion]);
+
   return (
-    // THAY ĐỔI CSS: Thêm print:h-auto và print:overflow-visible để fix lỗi cắt trang khi xuất PDF
-    <div className="flex h-screen print:h-auto print:min-h-0 bg-slate-50 font-sans overflow-hidden print:overflow-visible print:bg-white">
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
+    <div className={`relative min-h-screen overflow-x-clip md:flex print:block print:min-h-0 print:overflow-visible print:bg-white ${isPrintView ? 'print-mode bg-white text-ink' : 'app-luxury-shell bg-[#020606] text-white'}`}>
+      {!isPrintView && (
+        <div className="luxury-app-atmosphere no-print" aria-hidden="true">
+          <div className="luxury-app-glow luxury-app-glow-primary" />
+          <div className="luxury-app-glow luxury-app-glow-secondary" />
+          <div className="luxury-app-grid" />
+          <div className="luxury-app-noise" />
+          <div className="luxury-app-vignette" />
+        </div>
+      )}
+      <Sidebar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         isMobileOpen={isMobileOpen}
         setIsMobileOpen={setIsMobileOpen}
       />
-      
-      {/* THAY ĐỔI CSS TƯƠNG TỰ */}
-      <main className="flex-1 overflow-y-auto print:overflow-visible h-full print:h-auto p-4 md:p-8 lg:p-12 w-full print:p-0 print:block">
-        {renderContent()}
-      </main>
+
+      <div className="relative z-10 min-w-0 flex-1 md:ml-72 print:ml-0">
+        <header className="no-print sticky top-0 z-30 hidden h-16 items-center border-b border-cyan-100/[0.08] bg-[#020706]/72 px-6 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:flex lg:px-10">
+          <div>
+            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-200/45">Digital Technology & AI</p>
+            <h1 className="mt-0.5 font-display text-lg font-semibold tracking-tight text-white/90">{tabTitles[activeTab]}</h1>
+          </div>
+          <div className="ml-auto flex items-center gap-2 rounded-full border border-emerald-200/10 bg-emerald-300/[0.045] px-3 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-emerald-100/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 shadow-[0_0_10px_rgba(110,231,183,0.9)]" />
+            Portfolio system online
+          </div>
+        </header>
+
+        <main className={`w-full print:p-0 ${isPrintView ? '' : 'luxury-content'} ${activeTab === 'home' ? 'px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4' : 'px-4 py-7 sm:px-6 md:px-8 md:py-12 lg:px-12'}`}>
+          {isPrintView ? (
+            renderContent()
+          ) : activeTab === 'home' ? (
+            renderContent()
+          ) : (
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeTab}
+                variants={pageTransition}
+                initial={reduceMotion ? false : 'hidden'}
+                animate="visible"
+                exit={reduceMotion ? undefined : 'exit'}
+                className="tab-motion-shell"
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </main>
+      </div>
     </div>
   );
 }

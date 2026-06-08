@@ -9,17 +9,17 @@ export default function PrintView() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white p-8 md:p-12 shadow-lg rounded-xl print:shadow-none print:border-none print:p-0 print:w-full print:max-w-none text-slate-900 font-sans">
+    <div className="mx-auto max-w-4xl rounded-2xl border border-line bg-white p-5 text-slate-900 shadow-ambient sm:p-8 md:p-12 print:w-full print:max-w-none print:border-none print:p-0 print:shadow-none">
       
       {/* Nút Điều Khiển In (Bị tự động ẩn khi lưu file PDF) */}
-      <div className="no-print flex justify-between items-center mb-8 bg-slate-50 p-4 rounded-xl border border-slate-200 sticky top-4 z-50">
+      <div className="no-print sticky top-4 z-50 mb-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-line bg-panel/95 p-4 shadow-ambient backdrop-blur-xl sm:flex-row sm:items-center">
         <div>
           <h3 className="font-bold text-slate-800">Chế độ xem bản in chuyên dụng</h3>
           <p className="text-xs text-slate-500">Mọi thành phần nội dung đã được mở sẵn hoàn toàn để xuất PDF qua Ctrl + P</p>
         </div>
         <button
           onClick={handlePrint}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all text-sm"
+          className="button-primary"
         >
           <Printer size={18} />
           In / Lưu PDF (Ctrl + P)
