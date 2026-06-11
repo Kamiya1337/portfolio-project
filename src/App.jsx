@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import HomeTab from './components/HomeTab';
@@ -10,7 +7,7 @@ import EvidenceTable from './components/EvidenceTable';
 import RubricTable from './components/RubricTable';
 import Summary from './components/Summary';
 import PrintView from './components/PrintView';
-import { pageTransition } from './motion/variants';
+import { homePageTransition, pageTransition } from './motion/variants';
 
 const tabTitles = {
   home: 'Tổng quan Portfolio',
@@ -40,30 +37,6 @@ export default function App() {
 
   const isPrintView = activeTab === 'print';
 
-  useEffect(() => {
-    if (isPrintView || reduceMotion) return;
-
-    const lenis = new Lenis({
-      lerp: 0.075,
-      wheelMultiplier: 0.85,
-      smoothWheel: true,
-    });
-
-    lenis.on('scroll', ScrollTrigger.update);
-
-    const update = (time) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(update);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      gsap.ticker.remove(update);
-      lenis.destroy();
-    };
-  }, [isPrintView, reduceMotion]);
-
   return (
     <div className={`relative min-h-screen overflow-x-clip md:flex print:block print:min-h-0 print:overflow-visible print:bg-white ${isPrintView ? 'print-mode bg-white text-ink' : 'app-luxury-shell bg-[#020606] text-white'}`}>
       {!isPrintView && (
@@ -83,7 +56,7 @@ export default function App() {
       />
 
       <div className="relative z-10 min-w-0 flex-1 md:ml-72 print:ml-0">
-        <header className="no-print sticky top-0 z-30 hidden h-16 items-center border-b border-cyan-100/[0.08] bg-[#020706]/72 px-6 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:flex lg:px-10">
+        <header className="no-print sticky top-0 z-30 hidden h-16 items-center border-b border-cyan-100/[0.08] bg-[#020706]/94 px-6 text-white shadow-[0_10px_28px_rgba(0,0,0,0.2)] md:flex lg:px-10">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-200/45">Digital Technology & AI</p>
             <h1 className="mt-0.5 font-display text-lg font-semibold tracking-tight text-white/90">{tabTitles[activeTab]}</h1>
@@ -95,24 +68,22 @@ export default function App() {
         </header>
 
         <main className={`w-full print:p-0 ${isPrintView ? '' : 'luxury-content'} ${activeTab === 'home' ? 'px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4' : 'px-4 py-7 sm:px-6 md:px-8 md:py-12 lg:px-12'}`}>
-          {isPrintView ? (
-            renderContent()
-          ) : activeTab === 'home' ? (
-            renderContent()
-          ) : (
-            <AnimatePresence mode="wait" initial={false}>
+          <AnimatePresence mode="wait" initial={false}>
+            {isPrintView ? (
+              <div key="print">{renderContent()}</div>
+            ) : (
               <motion.div
                 key={activeTab}
-                variants={pageTransition}
+                variants={activeTab === 'home' ? homePageTransition : pageTransition}
                 initial={reduceMotion ? false : 'hidden'}
                 animate="visible"
                 exit={reduceMotion ? undefined : 'exit'}
-                className="tab-motion-shell"
+                className={activeTab === 'home' ? 'home-tab-motion-shell' : 'tab-motion-shell'}
               >
                 {renderContent()}
               </motion.div>
-            </AnimatePresence>
-          )}
+            )}
+          </AnimatePresence>
         </main>
       </div>
     </div>

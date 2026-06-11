@@ -45,7 +45,7 @@ export default function HomeTab({ setActiveTab }) {
             })}
           </motion.div>
 
-          <motion.button type="button" onClick={() => setActiveTab('projects')} initial={reduceMotion ? false : { opacity: 0, y: 28, filter: 'blur(10px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={motionViewport} transition={{ duration: reduceMotion ? 0 : 0.72, ease: [0.25, 0.46, 0.45, 0.94] }} whileHover={reduceMotion ? undefined : buttonHover} whileTap={reduceMotion ? undefined : buttonTap} className="mt-12 inline-flex items-center gap-3 rounded-full border border-cyan-100/[0.12] bg-cyan-100/[0.04] px-5 py-3 text-sm font-semibold text-cyan-50/78 backdrop-blur-xl">
+          <motion.button type="button" onClick={() => setActiveTab('projects')} initial={reduceMotion ? false : { opacity: 0, y: 28, scale: 0.98 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={motionViewport} transition={{ duration: reduceMotion ? 0 : 0.62, ease: [0.25, 0.46, 0.45, 0.94] }} whileHover={reduceMotion ? undefined : buttonHover} whileTap={reduceMotion ? undefined : buttonTap} className="mt-12 inline-flex items-center gap-3 rounded-full border border-cyan-100/[0.12] bg-cyan-100/[0.04] px-5 py-3 text-sm font-semibold text-cyan-50/78 backdrop-blur-xl">
             Khám phá toàn bộ bài tập <ArrowRight size={16} />
           </motion.button>
         </motion.div>

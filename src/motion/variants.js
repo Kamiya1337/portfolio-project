@@ -1,49 +1,64 @@
 export const premiumEase = [0.25, 0.46, 0.45, 0.94];
 
 export const blurSlideUp = {
-  hidden: { opacity: 0, y: 28 },
+  hidden: { opacity: 0, y: 34, scale: 0.985 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: premiumEase },
+    scale: 1,
+    transition: { duration: 0.62, ease: premiumEase },
   },
 };
 
 export const staggerGrid = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.06 } },
+  visible: { transition: { staggerChildren: 0.09, delayChildren: 0.08 } },
 };
 
 export const cardHover = {
-  y: -5,
-  scale: 1.01,
-  transition: { type: 'spring', stiffness: 260, damping: 24 },
+  y: -8,
+  scale: 1.018,
+  transition: { type: 'spring', stiffness: 280, damping: 23 },
 };
 
-export const buttonHover = { scale: 1.025, y: -1 };
-export const buttonTap = { scale: 0.98 };
+export const buttonHover = { scale: 1.04, y: -2 };
+export const buttonTap = { scale: 0.97 };
 
 export const lineReveal = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
-    transition: { duration: 0.6, ease: premiumEase },
+    transition: { duration: 0.65, ease: premiumEase },
   },
 };
 
-export const motionViewport = { once: true, amount: 0.18, margin: '0px 0px -5% 0px' };
+export const motionViewport = { once: true, amount: 0.22, margin: '0px 0px -7% 0px' };
 
 export const pageTransition = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 26, scale: 0.988 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.35, ease: premiumEase },
+    scale: 1,
+    transition: { duration: 0.56, ease: premiumEase },
   },
   exit: {
     opacity: 0,
-    y: -10,
-    transition: { duration: 0.2, ease: premiumEase },
+    y: -14,
+    scale: 0.992,
+    transition: { duration: 0.3, ease: premiumEase },
+  },
+};
+
+export const homePageTransition = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.5, ease: premiumEase },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.28, ease: premiumEase },
   },
 };
 
@@ -52,20 +67,21 @@ export const modalReveal = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.28, ease: premiumEase },
+    transition: { duration: 0.48, ease: premiumEase },
   },
   exit: {
     opacity: 0,
     scale: 0.99,
-    transition: { duration: 0.18, ease: premiumEase },
+    transition: { duration: 0.24, ease: premiumEase },
   },
 };
 
 export const tableRowReveal = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 20, scale: 0.995 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.32, ease: premiumEase },
+    scale: 1,
+    transition: { duration: 0.5, ease: premiumEase },
   },
 };

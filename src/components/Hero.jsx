@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
@@ -7,6 +7,13 @@ import { ArrowDown, ArrowRight, CircuitBoard, FileCheck2, Layers, Radio, Sparkle
 import AnimatedNumber from './AnimatedNumber';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+const heroVideoSources = {
+  heavy: '/media/hero-loop-scrub-60-interp.mp4',
+  light: '/media/hero-loop-scrub-light.mp4',
+  g4: '/media/hero-loop-scrub-web-g4.mp4',
+  g2: '/media/hero-loop-scrub-web-g2.mp4',
+};
 
 const headline = [
   { word: 'Engineering', index: 0 },
@@ -29,26 +36,18 @@ const wordVariants = {
   visible: (index) => ({
     opacity: 1,
     y: 0,
-    // filter: 'blur(0px)',
     transition: { duration: 0.82, delay: 0.12 + index * 0.09, ease },
   }),
 };
 
 export default function Hero({ student, setActiveTab }) {
   const reduceMotion = useReducedMotion();
-  const forceVideo = import.meta.env.DEV && new URLSearchParams(window.location.search).get('forceVideo') === '1';
+  const searchParams = new URLSearchParams(window.location.search);
+  const forceVideo = import.meta.env.DEV && searchParams.get('forceVideo') === '1';
+  const videoSource = heroVideoSources[searchParams.get('video')] || heroVideoSources.g4;
   const shouldReduceMotion = reduceMotion && !forceVideo;
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
-  const [scrubDebug, setScrubDebug] = useState({
-    progress: 0,
-    time: 0,
-    duration: 0,
-    reducedMotion: Boolean(reduceMotion),
-    triggerCreated: false,
-    readyState: 0,
-    videoPresent: false,
-  });
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const smoothX = useSpring(pointerX, { stiffness: 48, damping: 25 });
@@ -70,45 +69,14 @@ export default function Hero({ student, setActiveTab }) {
     pointerY.set(0);
   };
 
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-
-    window.__heroScrubDebug = {
-      reducedMotion: Boolean(reduceMotion),
-      get video() {
-        return videoRef.current;
-      },
-      get section() {
-        return sectionRef.current;
-      },
-      get scrollTriggers() {
-        return ScrollTrigger.getAll().map((trigger) => ({
-          id: trigger.vars.id,
-          progress: trigger.progress,
-          start: trigger.start,
-          end: trigger.end,
-          isActive: trigger.isActive,
-        }));
-      },
-    };
-  }, [reduceMotion]);
-
   useGSAP(() => {
-    setScrubDebug((current) => ({ ...current, reducedMotion: Boolean(reduceMotion) }));
-
     if (shouldReduceMotion) return undefined;
 
     const section = sectionRef.current;
     const video = videoRef.current;
-    if (!section || !video) {
-      setScrubDebug((current) => ({ ...current, videoPresent: Boolean(video) }));
-      return undefined;
-    }
+    if (!section || !video) return undefined;
 
     let trigger;
-    let frameRequest = 0;
-
-    const updateDebug = () => {};
 
     const createScrollScrub = () => {
       const duration = video.duration;
@@ -117,10 +85,11 @@ export default function Hero({ student, setActiveTab }) {
 
       video.pause();
       video.currentTime = 0.001;
+      let lastRequestedTime = video.currentTime;
 
       const scrubTo = gsap.quickTo(video, 'currentTime', {
-        duration: 0.24,
-        ease: 'power2.out',
+        duration: 0.016,
+        ease: 'none',
         overwrite: 'auto',
       });
 
@@ -135,9 +104,11 @@ export default function Hero({ student, setActiveTab }) {
           const safeDuration = Math.max(video.duration - 0.08, 0);
           const nextTime = progress * safeDuration;
 
-          if (Number.isFinite(nextTime)) {
-            scrubTo(nextTime);
-          }
+          const isEndpoint = progress <= 0 || progress >= 1;
+          if (!Number.isFinite(nextTime) || (!isEndpoint && Math.abs(nextTime - lastRequestedTime) < 0.12)) return;
+
+          lastRequestedTime = nextTime;
+          scrubTo(nextTime);
         },
       });
 
@@ -151,12 +122,11 @@ export default function Hero({ student, setActiveTab }) {
     }
 
     return () => {
-      cancelAnimationFrame(frameRequest);
       video.removeEventListener('loadedmetadata', createScrollScrub);
       trigger?.kill();
       gsap.killTweensOf(video, 'currentTime');
     };
-  }, { scope: sectionRef, dependencies: [reduceMotion] });
+  }, { scope: sectionRef, dependencies: [shouldReduceMotion] });
 
   return (
     <section
@@ -166,27 +136,15 @@ export default function Hero({ student, setActiveTab }) {
       onPointerLeave={resetPointer}
       className="cinematic-hero-scroll relative isolate min-h-[320vh] text-white"
     >
-      <div className="cinematic-hero hero-focal-rebuild sticky top-3 isolate min-h-[calc(100dvh-1.5rem)] overflow-hidden rounded-[32px] border border-cyan-100/[0.1] shadow-[0_60px_180px_rgba(0,0,0,0.72)]">
+      <div className="cinematic-hero hero-focal-rebuild sticky top-3 isolate min-h-[calc(100dvh-1.5rem)] overflow-hidden rounded-[32px] border border-cyan-100/[0.1] shadow-[0_28px_80px_rgba(0,0,0,0.5)]">
         <div className="cinematic-hero-aurora absolute inset-0" />
         <div className="luxury-grid absolute inset-0 opacity-40" />
         <div className="luxury-noise absolute inset-0 opacity-[0.05]" />
         <div className="hero-focal-vignette absolute inset-0" />
         <div className="absolute inset-x-0 top-0 z-[4] h-px bg-gradient-to-r from-transparent via-cyan-100/70 to-transparent" />
-        {false && import.meta.env.DEV && (
-          <div className="pointer-events-none absolute right-4 top-4 z-[60] rounded-xl border border-cyan-100/20 bg-black/70 px-3 py-2 font-mono text-[10px] leading-5 text-cyan-50/80 shadow-[0_18px_50px_rgba(0,0,0,0.35)]">
-            <div>progress: {scrubDebug.progress.toFixed(2)}</div>
-            <div>time: {scrubDebug.time.toFixed(2)}</div>
-            <div>duration: {scrubDebug.duration.toFixed(2)}</div>
-            <div>reduced motion: {String(scrubDebug.reducedMotion)}</div>
-            <div>trigger: {String(scrubDebug.triggerCreated)}</div>
-            <div>readyState: {scrubDebug.readyState}</div>
-            <div>video: {String(scrubDebug.videoPresent)}</div>
-          </div>
-        )}
-
         <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-1.5rem)] max-w-[1680px] flex-col px-5 pb-5 pt-7 sm:px-8 sm:pb-8 sm:pt-9 lg:px-12 lg:pb-8 lg:pt-10 xl:px-16">
         <motion.div initial={reduceMotion ? false : { opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : 0.7, delay: 0.08, ease }} className="flex items-center justify-between gap-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-100/15 bg-black/25 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-cyan-50/75 backdrop-blur-sm"><Sparkles size={12} className="text-cyan-300" /> Computer Engineering / AI</div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-100/15 bg-black/55 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.18em] text-cyan-50/75"><Sparkles size={12} className="text-cyan-300" /> Computer Engineering / AI</div>
           <div className="hidden items-center gap-2 font-mono text-[8px] uppercase tracking-[0.2em] text-white/38 sm:flex"><Radio size={11} className="text-emerald-300" /> Visual research archive / 2026</div>
         </motion.div>
 
@@ -221,14 +179,14 @@ export default function Hero({ student, setActiveTab }) {
             style={reduceMotion ? undefined : { x: mediaX, y: mediaY, rotateX: mediaRotateX, rotateY: mediaRotateY, transformPerspective: 1500 }}
             className="hero-media-dominant relative z-10 mx-auto w-full max-w-[1040px] lg:mx-0"
           >
-            <div className="hero-media-orb absolute inset-[8%] rounded-full bg-cyan-300/[0.12] blur-[64px]" />
-            <div className="hero-media-glass-frame relative aspect-[16/10] overflow-hidden rounded-[34px] border border-cyan-100/[0.18] bg-black/35 p-2 shadow-[0_48px_130px_rgba(0,0,0,0.62)] backdrop-blur-sm">
+            <div className="hero-media-orb absolute inset-[12%] rounded-full bg-cyan-300/[0.06]" />
+            <div className="hero-media-glass-frame relative aspect-[16/10] overflow-hidden rounded-[34px] border border-cyan-100/[0.18] bg-black/70 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.48)]">
               <div className="relative h-full overflow-hidden rounded-[26px] bg-[#010404]">
                 {shouldReduceMotion ? (
                   <img src="/media/hero-poster.png" alt="Cinematic computer engineering visual" width="1600" height="1000" className="h-full w-full object-cover object-center" />
                 ) : (
                   <video ref={videoRef} muted playsInline poster="/media/hero-poster.png" preload="auto" aria-label="Scroll-scrubbed cinematic computer engineering visual" className="h-full w-full object-cover object-center">
-                    <source src="/media/hero-loop-scrub-60-interp.mp4" type="video/mp4" />
+                    <source src={videoSource} type="video/mp4" />
                   </video>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-cyan-950/5" />
@@ -241,19 +199,19 @@ export default function Hero({ student, setActiveTab }) {
               </div>
             </div>
 
-            <motion.div animate={reduceMotion ? undefined : { y: [0, -9, 0] }} transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }} className="absolute -left-3 top-[12%] hidden min-w-48 rounded-2xl border border-cyan-100/[0.14] bg-[#061310]/90 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-sm sm:block">
+            <div className="absolute -left-3 top-[12%] hidden min-w-48 rounded-2xl border border-cyan-100/[0.14] bg-[#061310]/96 p-4 shadow-[0_14px_36px_rgba(0,0,0,0.34)] sm:block">
               <div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200/10 bg-emerald-300/[0.08] text-emerald-200"><CircuitBoard size={18} /></span><div><p className="font-mono text-[8px] uppercase tracking-[0.16em] text-white/35">System focus</p><p className="mt-1 text-sm font-semibold text-white/86">AI Engineering</p></div></div>
-            </motion.div>
+            </div>
 
-            <motion.div animate={reduceMotion ? undefined : { y: [0, 10, 0] }} transition={{ duration: 7.5, repeat: Infinity, ease: 'easeInOut', delay: 0.7 }} className="absolute -bottom-5 right-[7%] hidden w-56 rounded-2xl border border-cyan-100/[0.14] bg-[#04100e]/92 p-4 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-sm sm:block">
+            <div className="absolute -bottom-5 right-[7%] hidden w-56 rounded-2xl border border-cyan-100/[0.14] bg-[#04100e]/96 p-4 shadow-[0_14px_36px_rgba(0,0,0,0.34)] sm:block">
               <div className="flex items-center justify-between"><p className="font-mono text-[8px] uppercase tracking-[0.16em] text-white/35">Portfolio index</p><span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_9px_rgba(103,232,249,0.9)]" /></div>
               <div className="mt-3 flex items-end justify-between"><p className="font-display text-3xl font-semibold tracking-[-0.04em] text-white">06</p><p className="pb-1 text-[10px] text-white/42">documented projects</p></div>
               <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/[0.06]"><motion.div initial={reduceMotion ? { width: '86%' } : { width: 0 }} animate={{ width: '86%' }} transition={{ duration: reduceMotion ? 0 : 1.1, delay: 0.9, ease }} className="h-full rounded-full bg-gradient-to-r from-emerald-300 to-cyan-300" /></div>
-            </motion.div>
+            </div>
           </motion.div>
         </div>
 
-        <motion.div initial={reduceMotion ? false : 'hidden'} animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.09, delayChildren: 0.9 } } }} className="grid grid-cols-2 overflow-hidden rounded-2xl border border-white/[0.09] bg-black/30 backdrop-blur-sm lg:grid-cols-4">
+        <motion.div initial={reduceMotion ? false : 'hidden'} animate="visible" variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.06, delayChildren: 0.72 } } }} className="grid grid-cols-2 overflow-hidden rounded-2xl border border-white/[0.09] bg-black/65 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.article key={stat.label} variants={{ hidden: { opacity: 0, y: 22 }, visible: { opacity: 1, y: 0, transition: { duration: 0.68, ease } } }} whileHover={reduceMotion ? undefined : { backgroundColor: 'rgba(103,232,249,0.055)' }} className={`p-4 sm:p-5 ${index % 2 === 0 ? 'border-r border-white/[0.07]' : ''} ${index < 2 ? 'border-b border-white/[0.07] lg:border-b-0' : ''} ${index !== stats.length - 1 ? 'lg:border-r lg:border-white/[0.07]' : ''}`}>
               <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-cyan-100/38">{stat.label}</p>
