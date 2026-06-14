@@ -23,15 +23,17 @@ export default function ProjectsTab() {
   }
 
   return (
-    <div className="page-shell inner-luxury-page projects-cinematic-page">
-      <motion.header initial={reduceMotion ? false : 'hidden'} animate="visible" variants={blurSlideUp} className="inner-page-hero editorial-page-hero motion-depth-section relative overflow-hidden rounded-[30px] border border-cyan-100/[0.1] px-5 py-9 sm:px-9 sm:py-12">
-        <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cyan-300/[0.08] blur-3xl" />
+    <div data-print-section className="page-shell inner-luxury-page projects-cinematic-page">
+      <motion.header data-print-section initial={reduceMotion ? false : 'hidden'} animate="visible" variants={blurSlideUp} className="inner-page-hero editorial-page-hero motion-depth-section relative overflow-hidden rounded-[30px] border border-cyan-100/[0.1] px-5 py-9 sm:px-9 sm:py-12">
+        <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(103,232,249,0.1),transparent_68%)]" />
         <p className="section-label">Assignments archive</p>
         <h1 className="page-heading mt-3 max-w-3xl">Các bài tập thành phần</h1>
         <p className="page-description">Danh sách các bài học trọng tâm từ Chương 1 đến Chương 6, giữ nguyên toàn bộ báo cáo và minh chứng đã liên kết.</p>
         <motion.div variants={lineReveal} className="mt-6 h-px origin-left bg-gradient-to-r from-cyan-200/45 via-cyan-100/10 to-transparent" />
       </motion.header>
       <motion.section
+        data-print-section
+        data-print-grid
         initial={reduceMotion ? false : 'hidden'}
         whileInView="visible"
         viewport={motionViewport}

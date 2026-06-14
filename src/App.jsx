@@ -9,7 +9,6 @@ import ProjectsTab from './components/ProjectsTab';
 import EvidenceTable from './components/EvidenceTable';
 import RubricTable from './components/RubricTable';
 import Summary from './components/Summary';
-import PrintView from './components/PrintView';
 import { pageTransition } from './motion/variants';
 
 const tabTitles = {
@@ -18,7 +17,6 @@ const tabTitles = {
   evidence: 'Kiểm soát Minh chứng',
   rubric: 'Rubric & Đánh giá',
   summary: 'Tổng kết Cá nhân',
-  print: 'Bản in Portfolio',
 };
 
 export default function App() {
@@ -33,15 +31,12 @@ export default function App() {
       case 'evidence': return <EvidenceTable />;
       case 'rubric': return <RubricTable />;
       case 'summary': return <Summary />;
-      case 'print': return <PrintView />;
       default: return <HomeTab setActiveTab={setActiveTab} />;
     }
   };
 
-  const isPrintView = activeTab === 'print';
-
   useEffect(() => {
-    if (isPrintView || reduceMotion) return;
+    if (reduceMotion) return;
 
     const lenis = new Lenis({
       lerp: 0.075,
@@ -58,23 +53,29 @@ export default function App() {
     gsap.ticker.add(update);
     gsap.ticker.lagSmoothing(0);
 
+    const handleBeforePrint = () => lenis.stop();
+    const handleAfterPrint = () => lenis.start();
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+
     return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
       gsap.ticker.remove(update);
       lenis.destroy();
     };
-  }, [isPrintView, reduceMotion]);
+  }, [reduceMotion]);
 
   return (
-    <div className={`relative min-h-screen overflow-x-clip md:flex print:block print:min-h-0 print:overflow-visible print:bg-white ${isPrintView ? 'print-mode bg-white text-ink' : 'app-luxury-shell bg-[#020606] text-white'}`}>
-      {!isPrintView && (
-        <div className="luxury-app-atmosphere no-print" aria-hidden="true">
-          <div className="luxury-app-glow luxury-app-glow-primary" />
-          <div className="luxury-app-glow luxury-app-glow-secondary" />
-          <div className="luxury-app-grid" />
-          <div className="luxury-app-noise" />
-          <div className="luxury-app-vignette" />
-        </div>
-      )}
+    <div className="app-luxury-shell relative min-h-screen overflow-x-clip bg-[#020606] text-white md:flex">
+      <div className="luxury-app-atmosphere no-print" aria-hidden="true">
+        <div className="luxury-app-glow luxury-app-glow-primary" />
+        <div className="luxury-app-glow luxury-app-glow-secondary" />
+        <div className="luxury-app-grid" />
+        <div className="luxury-app-noise" />
+        <div className="luxury-app-vignette" />
+      </div>
       <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -82,7 +83,7 @@ export default function App() {
         setIsMobileOpen={setIsMobileOpen}
       />
 
-      <div className="relative z-10 min-w-0 flex-1 md:ml-72 print:ml-0">
+      <div className="relative z-10 min-w-0 flex-1 md:ml-72">
         <header className="no-print sticky top-0 z-30 hidden h-16 items-center border-b border-cyan-100/[0.08] bg-[#020706]/72 px-6 text-white shadow-[0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-2xl md:flex lg:px-10">
           <div>
             <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-200/45">Digital Technology & AI</p>
@@ -94,10 +95,8 @@ export default function App() {
           </div>
         </header>
 
-        <main className={`w-full print:p-0 ${isPrintView ? '' : 'luxury-content'} ${activeTab === 'home' ? 'px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4' : 'px-4 py-7 sm:px-6 md:px-8 md:py-12 lg:px-12'}`}>
-          {isPrintView ? (
-            renderContent()
-          ) : activeTab === 'home' ? (
+        <main className={`luxury-content w-full ${activeTab === 'home' ? 'px-2 py-2 sm:px-3 sm:py-3 md:px-4 md:py-4' : 'px-4 py-7 sm:px-6 md:px-8 md:py-12 lg:px-12'}`}>
+          {activeTab === 'home' ? (
             renderContent()
           ) : (
             <AnimatePresence mode="wait" initial={false}>

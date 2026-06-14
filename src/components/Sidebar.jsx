@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { BookOpen, CheckSquare, Cpu, FileCheck, Home, Menu, MessageSquare, Printer, X } from 'lucide-react';
+import { BookOpen, CheckSquare, Cpu, FileCheck, Home, Menu, MessageSquare, X } from 'lucide-react';
 import { portfolioData } from '../data/portfolioData';
 
 const navItems = [
@@ -62,9 +62,8 @@ export default function Sidebar({ activeTab, setActiveTab, isMobileOpen, setIsMo
           </div>
         </nav>
 
-        <div className="relative m-3 rounded-[22px] border border-white/[0.08] bg-white/[0.035] p-3">
-          <motion.button type="button" onClick={() => selectTab('print')} whileHover={reduceMotion ? undefined : { scale: 1.02, y: -1 }} whileTap={reduceMotion ? undefined : { scale: 0.97 }} className={`flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-4 text-sm font-semibold transition ${activeTab === 'print' ? 'bg-white text-black' : 'border border-white/10 bg-black/20 text-white/70 hover:bg-white/[0.09] hover:text-white'}`}><Printer size={16} /> Bản in PDF</motion.button>
-          <div className="mt-3 px-1 font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-white/25"><p>Digital Technology & AI</p><p>Academic submission system</p></div>
+        <div className="relative m-3 rounded-[22px] border border-white/[0.08] bg-white/[0.035] p-4">
+          <div className="px-1 font-mono text-[8px] uppercase leading-5 tracking-[0.15em] text-white/25"><p>Digital Technology & AI</p><p>Academic submission system</p></div>
         </div>
       </aside>
 

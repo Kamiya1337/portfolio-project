@@ -12,7 +12,7 @@ export default function PrintView() {
     <div className="mx-auto max-w-4xl rounded-2xl border border-line bg-white p-5 text-slate-900 shadow-ambient sm:p-8 md:p-12 print:w-full print:max-w-none print:border-none print:p-0 print:shadow-none">
       
       {/* Nút Điều Khiển In (Bị tự động ẩn khi lưu file PDF) */}
-      <div className="no-print sticky top-4 z-50 mb-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-line bg-panel/95 p-4 shadow-ambient backdrop-blur-xl sm:flex-row sm:items-center">
+      <div className="no-print sticky top-4 z-50 mb-8 flex flex-col items-start justify-between gap-4 rounded-xl border border-line bg-panel p-4 shadow-ambient sm:flex-row sm:items-center">
         <div>
           <h3 className="font-bold text-slate-800">Chế độ xem bản in chuyên dụng</h3>
           <p className="text-xs text-slate-500">Mọi thành phần nội dung đã được mở sẵn hoàn toàn để xuất PDF qua Ctrl + P</p>

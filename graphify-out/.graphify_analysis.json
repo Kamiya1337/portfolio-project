@@ -1,0 +1,185 @@
+{
+  "communities": {
+    "0": [
+      "components_assignmentcard",
+      "components_assignmentcard_assignmentcard",
+      "components_assignmentdetail",
+      "components_assignmentdetail_assignmentdetail",
+      "components_assignmentdetail_evidenceitem",
+      "components_hometab",
+      "components_projectstab",
+      "components_summary",
+      "motion_variants",
+      "motion_variants_blurslideup",
+      "motion_variants_buttonhover",
+      "motion_variants_buttontap",
+      "motion_variants_cardhover",
+      "motion_variants_linereveal",
+      "motion_variants_modalreveal",
+      "motion_variants_motionviewport",
+      "motion_variants_premiumease",
+      "motion_variants_staggergrid"
+    ],
+    "1": [
+      "package_devdependencies",
+      "package_devdependencies_autoprefixer",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_js",
+      "package_devdependencies_eslint_plugin_react_hooks",
+      "package_devdependencies_eslint_plugin_react_refresh",
+      "package_devdependencies_globals",
+      "package_devdependencies_postcss",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_vite",
+      "package_devdependencies_vitejs_plugin_react"
+    ],
+    "2": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_preview",
+      "package_type",
+      "package_version"
+    ],
+    "3": [
+      "components_hometab_hometab",
+      "components_printview_printview",
+      "components_projectstab_projectstab",
+      "components_summary_summary",
+      "motion_variants_pagetransition",
+      "src_app",
+      "src_app_app",
+      "src_app_tabtitles",
+      "src_main"
+    ],
+    "4": [
+      "components_animatednumber",
+      "components_animatednumber_animatednumber",
+      "components_hero",
+      "components_hero_ease",
+      "components_hero_headline",
+      "components_hero_hero",
+      "components_hero_stats",
+      "components_hero_wordvariants"
+    ],
+    "5": [
+      "package_dependencies",
+      "package_dependencies_framer_motion",
+      "package_dependencies_gsap",
+      "package_dependencies_gsap_react",
+      "package_dependencies_lenis",
+      "package_dependencies_lucide_react",
+      "package_dependencies_react",
+      "package_dependencies_react_dom"
+    ],
+    "6": [
+      "components_printview",
+      "components_sidebar",
+      "components_sidebar_navitems",
+      "components_sidebar_sidebar",
+      "data_portfoliodata",
+      "data_portfoliodata_portfoliodata"
+    ],
+    "7": [
+      "components_evidencetable",
+      "components_evidencetable_evidencetable",
+      "components_evidencetable_iscomplete",
+      "motion_variants_tablerowreveal"
+    ],
+    "8": [
+      "components_rubrictable",
+      "components_rubrictable_rubrictable",
+      "components_rubrictable_valid"
+    ],
+    "9": [
+      "eslint_config"
+    ],
+    "10": [
+      "postcss_config"
+    ],
+    "11": [
+      "tailwind_config"
+    ],
+    "12": [
+      "vite_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.3137254901960784,
+    "1": 0.15384615384615385,
+    "2": 0.2,
+    "3": 0.25,
+    "4": 0.2857142857142857,
+    "5": 0.25,
+    "6": 0.4666666666666667,
+    "7": 0.5,
+    "8": 0.6666666666666666,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0
+  },
+  "gods": [
+    {
+      "id": "motion_variants_blurslideup",
+      "label": "blurSlideUp",
+      "degree": 8
+    },
+    {
+      "id": "data_portfoliodata_portfoliodata",
+      "label": "portfolioData",
+      "degree": 7
+    },
+    {
+      "id": "motion_variants_staggergrid",
+      "label": "staggerGrid",
+      "degree": 7
+    },
+    {
+      "id": "motion_variants_cardhover",
+      "label": "cardHover",
+      "degree": 7
+    },
+    {
+      "id": "motion_variants_motionviewport",
+      "label": "motionViewport",
+      "degree": 7
+    },
+    {
+      "id": "motion_variants_linereveal",
+      "label": "lineReveal",
+      "degree": 6
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "motion_variants_buttonhover",
+      "label": "buttonHover",
+      "degree": 4
+    },
+    {
+      "id": "motion_variants_buttontap",
+      "label": "buttonTap",
+      "degree": 4
+    },
+    {
+      "id": "motion_variants_tablerowreveal",
+      "label": "tableRowReveal",
+      "degree": 3
+    }
+  ],
+  "surprises": [],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

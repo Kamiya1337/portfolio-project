@@ -28,7 +28,7 @@ export default function AssignmentDetail({ project, onBack, previewData, onPrevi
     <motion.div initial={reduceMotion ? false : 'hidden'} animate="visible" variants={blurSlideUp} className="page-shell inner-luxury-page">
       <AnimatePresence>
         {previewData.isOpen && (
-          <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/80 p-3 backdrop-blur-sm sm:p-6 print:hidden" role="dialog" aria-modal="true" aria-label="Xem trước minh chứng">
+          <motion.div initial={reduceMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-[#010404]/94 p-3 sm:p-6 print:hidden" role="dialog" aria-modal="true" aria-label="Xem trước minh chứng">
             <motion.div variants={modalReveal} initial={reduceMotion ? false : 'hidden'} animate="visible" exit={reduceMotion ? undefined : 'exit'} className="flex h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-line bg-panel shadow-lift">
               <div className="flex items-center justify-between border-b border-line px-4 py-3 sm:px-5">
                 <div><p className="section-label">Preview</p><h3 className="font-display font-semibold">{previewData.type === 'pdf' ? 'Báo cáo PDF' : 'Ảnh minh chứng'}</h3></div>

@@ -787,30 +787,292 @@ body.debug-lite-effects .cinematic-hero-aurora {
   display: none !important;
 }
 
+.hero-print-poster {
+  display: none;
+}
+
 @media print {
-  @page { margin: 14mm; }
-
-  .no-print { display: none !important; }
-
-  body, html, #root {
-    background: white !important;
-    color: black !important;
+  @page {
+    margin: 8mm;
   }
 
-  .print-card {
+  .app-luxury-shell {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    background: #020606 !important;
+  }
+
+  .luxury-app-atmosphere,
+  .luxury-app-glow,
+  .luxury-app-grid,
+  .luxury-app-noise,
+  .luxury-app-vignette,
+  [data-print-hidden],
+  .cinematic-hero-aurora,
+  .luxury-grid,
+  .luxury-noise,
+  .hero-focal-vignette,
+  .hero-media-orb,
+  .card-sheen,
+  .luxury-sidebar > [aria-hidden='true'],
+  .editorial-page-hero > .pointer-events-none,
+  .assignment-cinematic-card .pointer-events-none.absolute,
+  .inner-luxury-page .surface-card::before,
+  .inner-luxury-page .quiet-card::before,
+  .inner-luxury-page .assignment-premium-card::before,
+  .hero-media-glass-frame::before,
+  .hero-media-glass-frame::after,
+  .motion-depth-section::after {
+    display: none !important;
+  }
+
+  video,
+  .hero-screen-media {
+    display: none !important;
+  }
+
+  html,
+  body,
+  #root,
+  .app-luxury-shell,
+  .luxury-content,
+  .page-shell,
+  .home-luxury-shell {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+
+  .app-luxury-shell,
+  .luxury-content,
+  .page-shell,
+  .home-luxury-shell,
+  .home-story-section,
+  [data-print-section],
+  [data-print-grid] {
+    position: static !important;
+    transform: none !important;
+    contain: none !important;
+    will-change: auto !important;
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .app-luxury-shell {
+    position: relative !important;
+  }
+
+  .luxury-sidebar {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 18rem !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    transform: none !important;
+    background: #020706 !important;
+    border-color: rgba(165, 243, 252, 0.12) !important;
+  }
+
+  .luxury-sidebar::after {
+    display: none !important;
+  }
+
+  .luxury-sidebar nav {
+    overflow: visible !important;
+  }
+
+  .luxury-sidebar,
+  .luxury-sidebar *,
+  [data-print-hero],
+  [data-print-hero] *,
+  [data-print-section],
+  [data-print-section] *,
+  [data-print-card],
+  [data-print-card] * {
+    animation: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    transform-style: flat !important;
+    perspective: none !important;
     box-shadow: none !important;
-    border: 1px solid #cfcfcf !important;
-    background: white !important;
+    text-shadow: none !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
   }
 
-  .break-inside-avoid {
-    page-break-inside: avoid;
-    break-inside: avoid;
+  .cinematic-hero-scroll {
+    min-height: auto !important;
+    height: auto !important;
   }
 
-  .page-break-before {
-    page-break-before: always;
-    break-before: page;
+  .cinematic-hero,
+  .hero-focal-rebuild,
+  [data-print-hero-content] {
+    position: static !important;
+    top: auto !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  [data-print-hero] [style*='transform'],
+  .projects-cinematic-page [style*='transform'],
+  [data-print-section][style*='transform'],
+  [data-print-section] [style*='transform'],
+  [data-print-card][style*='transform'],
+  [data-print-card] [style*='transform'] {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  [data-print-hero] [style*='opacity'],
+  .projects-cinematic-page [style*='opacity'],
+  [data-print-section] [style*='opacity'],
+  [data-print-card] [style*='opacity'] {
+    opacity: 1 !important;
+  }
+
+  [data-print-section],
+  [data-print-grid] {
+    opacity: 1 !important;
+    transform: none !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  [data-print-grid] {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  .projects-cinematic-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  [data-print-card] {
+    min-height: 0 !important;
+    max-height: none !important;
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    border: 1px solid rgba(165, 243, 252, 0.18) !important;
+    background: rgba(4, 12, 12, 0.94) !important;
+  }
+
+  [data-print-small-card] {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  [data-print-home-grid] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 4mm !important;
+  }
+
+  [data-print-card] img {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .app-luxury-shell,
+  .hero-focal-rebuild,
+  .home-story-section,
+  .editorial-page-hero,
+  .inner-page-hero,
+  .summary-cinematic-panel,
+  .summary-integrity-panel {
+    background-image: none !important;
+  }
+
+  .hero-focal-rebuild,
+  .cinematic-hero {
+    background-color: #010505 !important;
+  }
+
+  .home-story-section,
+  .editorial-page-hero,
+  .inner-page-hero,
+  .summary-cinematic-panel,
+  .summary-integrity-panel {
+    background-color: #04100d !important;
+  }
+
+  .hero-print-poster {
+    display: block !important;
+  }
+
+  /* Final print flattening: preserve layout and dark surfaces without compositor-heavy effects. */
+  .tab-motion-shell,
+  .motion-depth-section,
+  .motion-hover-depth,
+  .projects-cinematic-grid,
+  .editorial-page-hero,
+  .inner-page-hero,
+  .surface-card,
+  .quiet-card,
+  .assignment-premium-card,
+  .competency-cinematic-card,
+  .assignment-cinematic-card,
+  .summary-cinematic-panel,
+  .summary-integrity-panel,
+  .evidence-dashboard,
+  .rubric-score-card,
+  .evidence-luxury-page .quiet-card,
+  .rubric-luxury-page .surface-card,
+  .summary-luxury-page .quiet-card {
+    will-change: auto !important;
+    transform: none !important;
+    transform-style: flat !important;
+    perspective: none !important;
+    filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .editorial-page-hero,
+  .surface-card,
+  .quiet-card,
+  .assignment-premium-card,
+  .competency-cinematic-card,
+  .assignment-cinematic-card,
+  .summary-cinematic-panel,
+  .summary-integrity-panel,
+  .evidence-dashboard,
+  .rubric-score-card {
+    background-image: none !important;
+    background-color: rgba(4, 12, 12, 0.96) !important;
+    border: 1px solid rgba(165, 243, 252, 0.16) !important;
+  }
+
+  .editorial-page-hero::before,
+  .editorial-page-hero::after,
+  .surface-card::before,
+  .surface-card::after,
+  .quiet-card::before,
+  .quiet-card::after,
+  .assignment-premium-card::before,
+  .assignment-premium-card::after,
+  .competency-cinematic-card::before,
+  .assignment-cinematic-card::before,
+  .hero-intelligence-panel::before {
+    display: none !important;
+  }
+}
+
+@media print and (orientation: portrait) {
+  .projects-cinematic-grid,
+  [data-print-grid] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
